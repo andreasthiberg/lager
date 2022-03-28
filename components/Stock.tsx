@@ -11,10 +11,10 @@ function StockList() {
       .then(result => setProducts(result.data));
   }, []);
 
-  const list = products.map((product, index) => <Text key={index}>{ product.name }</Text>);
+  const list = products.map((product, index) => <Text key={index} style={{marginTop: 10, borderWidth: 2, padding: 3}}>{ product.name } - Lagersaldo: { product.stock } </Text>);
 
   return (
-    <View>
+    <View style={{marginTop: 20}}>
       {list}
     </View>
   );
@@ -22,7 +22,7 @@ function StockList() {
 
 export default function Stock() {
   return (
-    <View>
+    <View style={{marginTop: 50, backgroundColor: '#fff', padding: 20}}>
       <Text style={{color: '#333', fontSize: 24}}>Lagerförteckning</Text>
       <StockList/>
     </View>
