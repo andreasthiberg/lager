@@ -1,8 +1,9 @@
+import * as React from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Image, StyleSheet, Text, View, ScrollView } from 'react-native';
 import muttrar from './assets/muttrar.jpg';
-import Stock from './components/Stock.tsx';
+import Stock from './components/Stock';
 
 export default function App() {
   return (

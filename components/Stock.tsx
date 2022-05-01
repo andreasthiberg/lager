@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useState, useEffect } from 'react';
 import { Text, View } from 'react-native';
 import config from "../config/config.json";
