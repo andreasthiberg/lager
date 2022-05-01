@@ -1,43 +1,43 @@
-import * as React from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { Image, StyleSheet, Text, View, ScrollView } from 'react-native';
-import muttrar from './assets/muttrar.jpg';
-import Stock from './components/Stock';
+import { StyleSheet } from 'react-native';
+import Home from "./components/Home";
+import Pick from "./components/Pick";
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+
+const Tab = createBottomTabNavigator();
+const routeIcons : any = {
+  "Lager": "home",
+  "Plock": "list",
+};
 
 export default function App() {
   return (
     <SafeAreaView style={styles.container}>
-    <ScrollView>
-      <View style={styles.base}>
-        <Text style={styles.title}>Infinity Warehouse</Text>
-        <Image source={muttrar} style={{ width: 240, height: 120, marginTop: 30}} />
-        <Stock />
-        <StatusBar style="auto" />
-      </View>
-    </ScrollView>
+      <NavigationContainer>
+      <Tab.Navigator screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName = routeIcons[route['name']] || "alert";
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: 'blue',
+        tabBarInactiveTintColor: 'gray',
+        })}
+      >
+        <Tab.Screen name="Lager" component={Home} />
+        <Tab.Screen name="Plock" component={Pick} />
+      </Tab.Navigator>
+      </NavigationContainer>
+    <StatusBar style="auto" />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#000"
-  },
-  base: {
-    alignItems: "center",
-    display: 'flex',
-    backgroundColor: '#f2f9fa',
-    paddingLeft: 12,
-    paddingRight: 12,
-    paddingTop: 40
-  },
-  title: {
-    color: '#000',
-    fontSize: 30
-  },
-  subtitle: {
-    color: "#000",
-    fontSize: 24
+    flex: 1,
   }
 });
