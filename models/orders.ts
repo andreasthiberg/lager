@@ -1,4 +1,5 @@
 import config from "../config/config.json";
+import productModel from "./products";
 
 const orders = {
     getOrders: async function getOrders() {
@@ -7,12 +8,39 @@ const orders = {
 
         return result.data;
     },
-    pickOrder: async function pickOrder() {
-        // TODO: Minska lagersaldo för de
-        // orderrader som finns i ordern
+    pickOrder: async function pickOrder(order: any) {  
+        
+        let id = order["id"];
+        let name = order["name"];
+        let api_key = config.api_key;
+        
+        //Create PUT Json
+        let changed_order = {
+            "id": id,
+            "name": name,
+            "api_key": api_key,
+            "status_id": 200
+        }
 
-        // TODO: Ändra status för ordern till packad
+        fetch("https://lager.emilfolino.se/v2/orders", {
+            body: JSON.stringify(changed_order),
+            headers: {
+              'content-type': 'application/json'
+            },
+            method: 'PUT'
+        })
+        .then(function (response) {
+
+        });
+
+        //Change stock of picked items
+        let picked_items = order["order_items"];
+        for(let i = 0; i < picked_items.length; i++) {
+            let item = picked_items[i];
+            productModel.changeStock(item);
+        }  
+
     }
 };
-
+   
 export default orders;
