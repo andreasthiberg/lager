@@ -14,8 +14,8 @@ const products = {
             "api_key": api_key,
             "stock": new_stock
         };
-        
-        fetch(`${config.base_url}/v2/products`, {
+        console.log(changed_product);
+        fetch(`${config.base_url}/products`, {
             body: JSON.stringify(changed_product),
             headers: {
               'content-type': 'application/json'

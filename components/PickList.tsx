@@ -1,5 +1,6 @@
 import { View, Text, Button } from "react-native";
 import orderModel from "../models/orders";
+import { Base } from '../styles';
 
 export default function PickList({ route, navigation }: {route: any; navigation: any}) {
     const { order } = route.params;
@@ -32,17 +33,17 @@ export default function PickList({ route, navigation }: {route: any; navigation:
     if(orderPossible){
         action = <Button title="Plocka order" onPress={pick} />;
     } else {
-        action = <Text>Order inte möjligt</Text>
+        action = <Text style={Base.warning_text}>Order inte möjlig</Text>
     }
 
     return (
         <View>
+            <Text style={Base.subtitle}>Beställare:</Text>
             <Text>{order.name}</Text>
             <Text>{order.address}</Text>
             <Text>{order.zip} {order.city}</Text>
-            <Text>{order.status}</Text>
-
-            <Text>Produkter:</Text>
+            <Text></Text>
+            <Text style={Base.subtitle}>Produkter:</Text>
 
             {orderItemsList}
             {action}

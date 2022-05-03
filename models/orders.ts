@@ -19,7 +19,7 @@ const orders = {
             "id": id,
             "name": name,
             "api_key": api_key,
-            "status_id": 200
+            "status_id": 100
         }
 
         fetch("https://lager.emilfolino.se/v2/orders", {
