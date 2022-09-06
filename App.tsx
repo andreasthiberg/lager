@@ -6,6 +6,7 @@ import Pick from "./components/Pick";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { useState, useEffect } from 'react';
 
 const Tab = createBottomTabNavigator();
 const routeIcons : any = {
@@ -14,6 +15,8 @@ const routeIcons : any = {
 };
 
 export default function App() {
+  const [products, setProducts] = useState([]);
+
   return (
     <SafeAreaView style={styles.container}>
       <NavigationContainer>
@@ -27,8 +30,12 @@ export default function App() {
         tabBarInactiveTintColor: 'gray',
         })}
       >
-        <Tab.Screen name="Lager" component={Home} />
-        <Tab.Screen name="Plock" component={Pick} />
+        <Tab.Screen name="Lager">
+            {() => <Home products={products} setProducts={setProducts} />}
+        </Tab.Screen>
+        <Tab.Screen name="Plock">
+            {() => <Pick products={products} setProducts={setProducts} />}
+        </Tab.Screen>
       </Tab.Navigator>
       </NavigationContainer>
     <StatusBar style="auto" />
