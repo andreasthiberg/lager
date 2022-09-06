@@ -10,7 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 const Tab = createBottomTabNavigator();
 const routeIcons : any = {
   "Lager": "home",
-  "Plock": "list",
+  "Plock": "list"
 };
 
 export default function App() {
