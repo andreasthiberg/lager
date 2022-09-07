@@ -14,7 +14,7 @@ const products = {
             "api_key": api_key,
             "stock": new_stock
         };
-        console.log(changed_product);
+
         fetch(`${config.base_url}/products`, {
             body: JSON.stringify(changed_product),
             headers: {
@@ -30,6 +30,19 @@ const products = {
         const result = await response.json();
 
         return result.data;
+    },
+    updateProduct: async function updateProduct(updatedProduct: any) {
+        updatedProduct.api_key = `${config.api_key}`;
+        await fetch("https://lager.emilfolino.se/v2/products", {
+            body: JSON.stringify(updatedProduct),
+            headers: {
+              'content-type': 'application/json'
+            },
+            method: 'PUT'
+        })
+        .then(function (response) {
+        
+        });
     }
 };
    

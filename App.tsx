@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
 import Home from "./components/Home";
 import Pick from "./components/Pick";
+import Deliveries from "./components/Deliveries";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -36,6 +37,9 @@ export default function App() {
         <Tab.Screen name="Plock">
             {() => <Pick products={products} setProducts={setProducts} />}
         </Tab.Screen>
+        <Tab.Screen name="Inlevereanser">
+            {() => <Deliveries products={products} setProducts={setProducts} />}
+        </Tab.Screen> 
       </Tab.Navigator>
       </NavigationContainer>
     <StatusBar style="auto" />

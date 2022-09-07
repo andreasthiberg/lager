@@ -1,7 +1,6 @@
 
 export const base =  {
       alignItems: "center",
-      display: 'flex',
       backgroundColor: '#f2f9fa',
       paddingLeft: 12,
       paddingRight: 12,
