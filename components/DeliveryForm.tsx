@@ -12,6 +12,7 @@ export default function DeliveryForm({ navigation, setProducts }: {navigation:an
     const [currentProduct, setCurrentProduct] = useState<Partial<Product>>({});
 
     async function addDelivery() {
+        console.log(delivery);
         await deliveryModel.addDelivery(delivery);
 
         const updatedProduct = {
@@ -86,11 +87,13 @@ function ProductDropDown(props: any) {
         productsHash[prod.id] = prod;
         return <Picker.Item key={index} label={prod.name} value={prod.id} />;
     });
+
     return (
         <Picker
             style={{ ...Forms.picker }}
             selectedValue={props.delivery?.product_id}
             onValueChange={(itemValue) => {
+                console.log({ ...props.delivery});
                 props.setDelivery({ ...props.delivery, product_id: itemValue });
                 props.setCurrentProduct(productsHash[itemValue]);
             }}>

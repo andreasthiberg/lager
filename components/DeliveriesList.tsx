@@ -27,7 +27,7 @@ export default function DeliveriesList({ route, navigation }: {route:any;navigat
     } else {
         
         listOfDeliveries = allDeliveries.map((delivery, index) => {
-            return <Text style={{margin: 20}} key={index}>ID: {delivery['id']} AMOUNT: {delivery['amount']} PRODUCT: {delivery['product_name']} COMMENT: {delivery['comment']}</Text>
+            return <Text style={{margin: 20}} key={index}>ID: {delivery['id']} AMOUNT: {delivery['amount']} PRODUCT: {delivery['product_name']} COMMENT: {delivery['comment']} DATE: {delivery['delivery_date']}</Text>
         });
 
     }

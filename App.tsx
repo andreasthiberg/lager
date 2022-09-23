@@ -39,7 +39,7 @@ export default function App() {
         </Tab.Screen>
         <Tab.Screen name="Inlevereanser">
             {() => <Deliveries products={products} setProducts={setProducts} />}
-        </Tab.Screen> 
+        </Tab.Screen>  
       </Tab.Navigator>
       </NavigationContainer>
     <StatusBar style="auto" />

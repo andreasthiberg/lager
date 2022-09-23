@@ -8,7 +8,12 @@ const deliveries = {
         return result.data;
     },
     addDelivery: async function addDelivery(newDelivery: any){
+        if(!newDelivery.hasOwnProperty('delivery-date')){
+            newDelivery['delivery_date'] = new Date().toJSON().slice(0, 10);
+        }
         newDelivery.api_key = `${config.api_key}`;
+        console.log(newDelivery);
+
         fetch("https://lager.emilfolino.se/v2/deliveries", {
         body: JSON.stringify(newDelivery),
         headers: {
