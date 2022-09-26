@@ -4,6 +4,8 @@ import Stock from '../components/Stock';
 import { Base } from '../styles';
 
 export default function Home({products, setProducts}:any) {
+
+
     return (
         <ScrollView>
         <View style={Base.base}>
