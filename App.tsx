@@ -10,6 +10,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
+import authModel from "./models/auth";
 
 const Tab = createBottomTabNavigator();
 const routeIcons : any = {
