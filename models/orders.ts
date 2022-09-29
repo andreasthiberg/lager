@@ -40,6 +40,28 @@ const orders = {
             productModel.changeStock(item);
         }  
 
+    },
+    getSingleOrder: async function getSingleOrder(order_id: number) {
+        const response = await fetch(`${config.base_url}/orders/${order_id}?api_key=${config.api_key}`);
+        const result = await response.json();
+        return result.data;
+    },
+    updateOrderStatus: async function updateOrderStatus(order: Order, new_status: number) {
+            //Create PUT Json
+            let changed_order = {
+                "id": order.id,
+                "name": order.name,
+                "api_key": config.api_key,
+                "status_id": new_status
+            }
+    
+            fetch("https://lager.emilfolino.se/v2/orders", {
+                body: JSON.stringify(changed_order),
+                headers: {
+                  'content-type': 'application/json'
+                },
+                method: 'PUT'
+            })        
     }
 };
    

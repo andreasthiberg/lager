@@ -1,105 +1,81 @@
 import { useState, useEffect } from 'react';
 import { Base, Typography, Forms } from '../styles';
+import invoiceModel from "../models/invoices";
+import orderModel from "../models/orders"
 import { Picker } from '@react-native-picker/picker';
-import productModel from "../models/products";
-import deliveryModel from "../models/deliveries";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Platform, ScrollView, Text, TextInput, Button, View } from "react-native";
 
 
-export default function DeliveryForm({ navigation, setProducts }: {navigation:any, setProducts:any}) {
-    const [delivery, setDelivery] = useState<Partial<Delivery>>({});
-    const [currentProduct, setCurrentProduct] = useState<Partial<Product>>({});
+export default function InvoiceForm( {navigation}:any) {
 
-    async function addDelivery() {
-        console.log(delivery);
-        await deliveryModel.addDelivery(delivery);
+    const [invoice, setInvoice] = useState<Partial<Invoice>>({});
+    const [invoicePossible, setInvoicePossible] = useState(false);
 
-        const updatedProduct = {
-            ...currentProduct,
-            stock: (currentProduct.stock || 0) + (delivery.amount || 0)
-        };
-
-        await productModel.updateProduct(updatedProduct);
-        setProducts(await productModel.getProducts());
+    async function createInvoice() {
+        await invoiceModel.addInvoice(invoice);
         navigation.navigate("List", { reload: true });
     }
 
     return (
         <ScrollView>
             <View style={{ ...Base.base }}>
-            <Text style={{ ...Typography.header2 }}>Ny inleverans</Text>
+            <Text style={{ ...Typography.header2 }}>Skapa faktura</Text>
 
-            <Text style={{ ...Typography.label }}>Kommentar</Text>
-            <TextInput
-                style={{ ...Forms.input }}
-                onChangeText={(content: string) => {
-                    setDelivery({ ...delivery, comment: content })
-                }}
-                value={delivery?.comment}
+            <Text style={{ ...Typography.label }}>Välj order</Text>
+            <OrderDropdown
+                invoice={invoice}
+                setInvoice ={setInvoice}
             />
-
-            <Text style={{ ...Typography.label }}>Antal</Text>
-            <TextInput
-                style={{ ...Forms.input }}
-                onChangeText={(content: string) => {
-                    setDelivery({ ...delivery, amount: parseInt(content) })
-                }}
-                value={delivery?.amount?.toString()}
-                keyboardType="numeric"
-            />
-
-            <Text style={{ ...Typography.label }}>Produkt</Text>
-            <ProductDropDown
-                delivery={delivery}
-                setDelivery={setDelivery}
-                setCurrentProduct={setCurrentProduct}
-            />
-
-            <Text style={{ ...Typography.label }}>Datum</Text>
+            <Text style={{ ...Typography.label }}>Välj förfallodatum</Text>
             <DateDropDown
-                delivery={delivery}
-                setDelivery={setDelivery}
+                invoice={invoice}
             />
             <Button
-                title="Gör inleverans"
+                title="Skapa faktura"
                 onPress={() => {
-                    addDelivery();
+                    createInvoice();
                 }}
             />
+
             </View>
         </ScrollView>
     );
-};
+}
 
-function ProductDropDown(props: any) {
-    const [products, setProducts] = useState<Product[]>([]);
-    let productsHash: any = {};
+function OrderDropdown(props: any) {
+    const [orders, setOrders] = useState<Order[]>([]);
 
     useEffect( () => {
-        const productFunction = async () => {
-            setProducts(await productModel.getProducts());
+        const invoiceFunction = async () => {
+            setOrders(await orderModel.getOrders());    
         }
-        productFunction();
+        invoiceFunction();
     }, []);
 
-    const itemsList = products.map((prod, index) => {
-        productsHash[prod.id] = prod;
-        return <Picker.Item key={index} label={prod.name} value={prod.id} />;
-    });
+    /* Add initial value from order picker */
+    useEffect( () => {
+        if(typeof orders[0] !== "undefined"){
+            props.setInvoice({...props.invoice, order_id: orders[0].id})
+        }
+    }, [orders]);
 
-    return (
-        <Picker
-            style={{ ...Forms.picker }}
-            selectedValue={props.delivery?.product_id}
-            onValueChange={(itemValue) => {
-                console.log({ ...props.delivery});
-                props.setDelivery({ ...props.delivery, product_id: itemValue });
-                props.setCurrentProduct(productsHash[itemValue]);
-            }}>
-            {itemsList}
-        </Picker>
-    );
+    const itemsList = orders.map((order, index) => {
+            if(order.status_id === 200 || order.status_id === 400){   
+                return <Picker.Item key={index} label={order.id + " - " + order.name} value={order.id} />;
+            }
+    })
+
+        return (
+            <Picker
+                style={{ ...Forms.picker }}
+                selectedValue={props.invoice?.order_id}
+                onValueChange={(itemValue) => {
+                    props.setInvoice({ ...props.invoice, order_id: itemValue });
+                }}>
+                {itemsList}
+            </Picker>
+        );
 }
 
 function DateDropDown(props: any) {
@@ -121,9 +97,9 @@ function DateDropDown(props: any) {
                     onChange={(event: any, date : any) => {
                         setDropDownDate(date);
 
-                        props.setDelivery({ 
-                            ...props.delivery,
-                            delivery_date: date.toLocaleDateString('se-SV'),
+                        props.setInvoice({ 
+                            ...props.invoice,
+                            due_date: date.toLocaleDateString('se-SV'),
                         });
 
                         setShow(false);

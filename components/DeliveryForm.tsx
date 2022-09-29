@@ -5,6 +5,7 @@ import productModel from "../models/products";
 import deliveryModel from "../models/deliveries";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Platform, ScrollView, Text, TextInput, Button, View } from "react-native";
+import products from '../models/products';
 
 
 export default function DeliveryForm({ navigation, setProducts }: {navigation:any, setProducts:any}) {
@@ -12,7 +13,6 @@ export default function DeliveryForm({ navigation, setProducts }: {navigation:an
     const [currentProduct, setCurrentProduct] = useState<Partial<Product>>({});
 
     async function addDelivery() {
-        console.log(delivery);
         await deliveryModel.addDelivery(delivery);
 
         const updatedProduct = {
@@ -24,7 +24,6 @@ export default function DeliveryForm({ navigation, setProducts }: {navigation:an
         setProducts(await productModel.getProducts());
         navigation.navigate("List", { reload: true });
     }
-
     return (
         <ScrollView>
             <View style={{ ...Base.base }}>
@@ -83,17 +82,23 @@ function ProductDropDown(props: any) {
         productFunction();
     }, []);
 
+    useEffect( () => {
+        if(typeof products[0] !== "undefined"){
+            props.setDelivery({...props.delivery, product_id: products[0].id})
+        }
+    }, [products]);
+
     const itemsList = products.map((prod, index) => {
         productsHash[prod.id] = prod;
         return <Picker.Item key={index} label={prod.name} value={prod.id} />;
     });
+
 
     return (
         <Picker
             style={{ ...Forms.picker }}
             selectedValue={props.delivery?.product_id}
             onValueChange={(itemValue) => {
-                console.log({ ...props.delivery});
                 props.setDelivery({ ...props.delivery, product_id: itemValue });
                 props.setCurrentProduct(productsHash[itemValue]);
             }}>

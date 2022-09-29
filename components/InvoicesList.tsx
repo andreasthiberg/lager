@@ -1,50 +1,87 @@
-
+import { DataTable } from "react-native-paper";
 import { useState, useEffect } from 'react';
 import { View, Text, Button, ScrollView } from "react-native";
+import invoiceModel from "../models/invoices";
 import deliveryModel from "../models/deliveries";
 import { Base, Typography} from '../styles';
 
-export default function DeliveriesList({ route, navigation }: {route:any;navigation:any}) {
+export default function InvoicesList({ route, navigation }: {route:any;navigation:any}) {
     const { reload } = route.params || false;
-    const [allDeliveries, setAllDeliveries] = useState([]);
+    const [allInvoices, setAllInvoices] = useState([]);
+    const [invoicePossible, setInvoicePossible] = useState(false);
 
     if (reload) {
-        reloadDeliveries();
+        reloadInvoices();
     }
 
-    async function reloadDeliveries() {
-        setAllDeliveries(await deliveryModel.getDeliveries());
+    async function reloadInvoices() {
+        setAllInvoices(await invoiceModel.getInvoices());
+    }
+
+    async function checkInvoicePossible() {
+        setInvoicePossible(await invoiceModel.checkForPossibleInvoices())
     }
 
     useEffect(() => {
-        reloadDeliveries();
+        reloadInvoices();
+        checkInvoicePossible();
     }, []);
 
-    let listOfDeliveries;
+    let tableOfInvoices;
 
-    if(allDeliveries.length == 0 ){
-         listOfDeliveries = <Text>Inga leveranser än!</Text>
+    if(allInvoices.length == 0 ){
+        tableOfInvoices = <Text>Inga leveranser än!</Text>
     } else {
-        
-        listOfDeliveries = allDeliveries.map((delivery, index) => {
-            return <Text style={{margin: 20}} key={index}>ID: {delivery['id']} AMOUNT: {delivery['amount']} PRODUCT: {delivery['product_name']} COMMENT: {delivery['comment']} DATE: {delivery['delivery_date']}</Text>
-        });
-
+        tableOfInvoices = InvoiceTable(allInvoices);
     }
+
+    /* Check if possible invoices available */
+    let createInvoiceButton;
+    if (invoicePossible){
+        createInvoiceButton = <Button
+        title="Skapa ny faktura"
+        onPress={() => {
+                navigation.navigate('Form');
+        }}
+        />;
+    } else {
+        createInvoiceButton = <Text>Inga fler möjliga fakturor.</Text>
+    }
+
+
     
     return (
         <ScrollView>
         <View style={Base.base}>
-            <Text style={Typography.header2}>Inleveranser</Text>
-            {listOfDeliveries}
-            <Button
-                title="Skapa ny inleverans"
-                onPress={() => {
-                    navigation.navigate('Form');
-                }}
-            />
+            <Text style={Typography.header2}>Fakturor</Text>
+            {tableOfInvoices}
+            {createInvoiceButton}
         </View>
         </ScrollView>
     );
 
+}
+
+function InvoiceTable(invoices: any) {
+
+    const table = invoices.map((invoice: any, index: number) => {
+        return (
+            <DataTable.Row key={index}>
+              <DataTable.Cell>{invoice.id}</DataTable.Cell>
+              <DataTable.Cell>{invoice.total_price}</DataTable.Cell>
+              <DataTable.Cell> {invoice.due_date}</DataTable.Cell>
+            </DataTable.Row>
+        );
+    });
+
+    return (
+        <DataTable>
+            <DataTable.Header>
+                <DataTable.Title>Order ID</DataTable.Title>
+                <DataTable.Title>Total Price</DataTable.Title>
+                <DataTable.Title>Due date</DataTable.Title>
+            </DataTable.Header>
+            {table}
+        </DataTable>
+    );
 }

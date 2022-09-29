@@ -6,12 +6,12 @@ import InvoiceForm from './InvoiceForm';
 
 const Stack = createNativeStackNavigator();
 
-export default function Deliveries(props:any) {
+export default function Invoices(props:any) {
     return (
         <Stack.Navigator initialRouteName="List">
             <Stack.Screen name="List" component={InvoicesList} />
             <Stack.Screen name="Form">
-                {(screenProps) => <InvoiceForm {...screenProps} setProducts={props.setProducts} />}
+                {(screenProps) => <InvoiceForm {...screenProps} />}
             </Stack.Screen>
         </Stack.Navigator>
     );
