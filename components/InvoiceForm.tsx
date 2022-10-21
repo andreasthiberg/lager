@@ -10,7 +10,6 @@ import { Platform, ScrollView, Text, TextInput, Button, View } from "react-nativ
 export default function InvoiceForm( {navigation}:any) {
 
     const [invoice, setInvoice] = useState<Partial<Invoice>>({});
-    const [invoicePossible, setInvoicePossible] = useState(false);
 
     async function createInvoice() {
         await invoiceModel.addInvoice(invoice);

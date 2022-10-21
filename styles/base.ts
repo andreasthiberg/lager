@@ -2,6 +2,7 @@
 export const base: any =  {
       backgroundColor: '#f2f9fa',
       paddingLeft: 12,
+      paddingBottom: 50,
       paddingRight: 12,
       paddingTop: 40,
       alignItems: "center"

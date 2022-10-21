@@ -24,7 +24,7 @@ const auth = {
             },
         });
         const result = await response.json();
-
+        console.log(result);
         await storage.storeToken(result.data.token);
 
         return result.data.message;
