@@ -7,8 +7,10 @@ import { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 
 import getCoordinates from "../models/nominatim"
+import { showMessage } from "react-native-flash-message";
 
 export default function ShipSingleOrder({ route } :any) {
+    console.log(route);
     const {order} = route.params;
     const [marker, setMarker] = useState(<Marker
         coordinate={{ latitude: 0, longitude: 0 }}
@@ -23,6 +25,14 @@ export default function ShipSingleOrder({ route } :any) {
     useEffect(() => {
         (async () => {
             const results = await getCoordinates(`${order.address}, ${order.city}`);
+            if (results.length === 0){
+                showMessage({
+                    message: "Adressfel",
+                    description: "Koordinater gick inte att hitta för leveransadressen",
+                    type: "danger",
+                });
+                return;
+            }
             setMarker(<Marker
                 coordinate={{ latitude: parseFloat(results[0].lat), longitude: parseFloat(results[0].lon) }}
                 title={results[0].display_name}
@@ -83,7 +93,7 @@ export default function ShipSingleOrder({ route } :any) {
             <Text>{order.zip} {order.city}</Text>
             <Text></Text>
             <Text style={Base.subtitle}>Produkter:</Text>
-
+            <Text>{errorMessage}</Text>
             {orderItemsList}
         </View>
         </View>

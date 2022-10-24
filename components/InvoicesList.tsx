@@ -1,9 +1,8 @@
-import { DataTable } from "react-native-paper";
 import { useState, useEffect } from 'react';
 import { View, Text, Button, ScrollView } from "react-native";
 import invoiceModel from "../models/invoices";
-import deliveryModel from "../models/deliveries";
 import { Base, Typography} from '../styles';
+import InvoiceTable from "./InvoiceTable";
 
 export default function InvoicesList({ route, navigation }: {route:any;navigation:any}) {
     const { reload } = route.params || false;
@@ -32,7 +31,7 @@ export default function InvoicesList({ route, navigation }: {route:any;navigatio
     if(allInvoices.length == 0 ){
         tableOfInvoices = <Text>Inga leveranser än!</Text>
     } else {
-        tableOfInvoices = InvoiceTable(allInvoices);
+        tableOfInvoices = <InvoiceTable invoices={allInvoices} />
     }
 
     /* Check if possible invoices available */
@@ -60,28 +59,4 @@ export default function InvoicesList({ route, navigation }: {route:any;navigatio
         </ScrollView>
     );
 
-}
-
-function InvoiceTable(invoices: any) {
-
-    const table = invoices.map((invoice: any, index: number) => {
-        return (
-            <DataTable.Row key={index}>
-              <DataTable.Cell>{invoice.id}</DataTable.Cell>
-              <DataTable.Cell>{invoice.total_price}</DataTable.Cell>
-              <DataTable.Cell> {invoice.due_date}</DataTable.Cell>
-            </DataTable.Row>
-        );
-    });
-
-    return (
-        <DataTable>
-            <DataTable.Header>
-                <DataTable.Title>Order ID</DataTable.Title>
-                <DataTable.Title>Total Price</DataTable.Title>
-                <DataTable.Title>Due date</DataTable.Title>
-            </DataTable.Header>
-            {table}
-        </DataTable>
-    );
 }

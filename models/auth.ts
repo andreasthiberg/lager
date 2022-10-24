@@ -25,9 +25,11 @@ const auth = {
         });
         const result = await response.json();
         console.log(result);
+        if("errors" in result){
+            return result;
+        }
         await storage.storeToken(result.data.token);
-
-        return result.data.message;
+        return result
     },
     register: async function register(email: string, password: string) {
         const data = {
@@ -42,7 +44,7 @@ const auth = {
                 'content-type': 'application/json'
             },
         });
-
+        
         return await response.json();
     },
     logout: async function logout() {

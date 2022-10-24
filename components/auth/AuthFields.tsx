@@ -31,7 +31,7 @@ export default function AuthFields({ auth, setAuth, title, submit, navigation}:a
             />
             {title === "Logga in" &&
                 <Button
-                    title="Registrera istället"
+                    title="Registrera"
                     onPress={() => {
                         navigation.navigate("Register");
                     }}

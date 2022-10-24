@@ -5,7 +5,7 @@ import productModel from "../models/products";
 import deliveryModel from "../models/deliveries";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Platform, ScrollView, Text, TextInput, Button, View } from "react-native";
-import products from '../models/products';
+import { showMessage } from 'react-native-flash-message';
 
 
 export default function DeliveryForm({ navigation, setProducts }: {navigation:any, setProducts:any}) {
@@ -13,6 +13,15 @@ export default function DeliveryForm({ navigation, setProducts }: {navigation:an
     const [currentProduct, setCurrentProduct] = useState<Partial<Product>>({});
 
     async function addDelivery() {
+
+        if(delivery.amount === undefined){
+            showMessage({
+                message: "Antal saknas",
+                description: "Fyll i antalet i leveransen",
+                type: "warning",
+            });
+            return;
+        }
         await deliveryModel.addDelivery(delivery);
 
         const updatedProduct = {
@@ -42,7 +51,13 @@ export default function DeliveryForm({ navigation, setProducts }: {navigation:an
             <TextInput
                 style={{ ...Forms.input }}
                 onChangeText={(content: string) => {
-                    setDelivery({ ...delivery, amount: parseInt(content) })
+                    let amount;
+                    if(content===""){
+                        amount = undefined;
+                    } else {
+                        amount = parseInt(content);
+                    }
+                    setDelivery({ ...delivery, amount: amount })
                 }}
                 value={delivery?.amount?.toString()}
                 keyboardType="numeric"
